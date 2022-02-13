@@ -105,6 +105,11 @@ interface IDogeHero is IERC721Enumerable {
 interface IDogeWar {
     event DepositDoges(address indexed owner, uint256[] dogeIds);
     event WithdrawDoges(address indexed owner, uint256[] dogeIds);
+    /**
+    status = 0: hòa
+    status = 1: win
+    status = 2: lose
+     */
     event AttackHero(address indexed attacker, address indexed defender, uint256 status, uint256 reward);
     
     function depositDoges(uint256[] memory dogeIds) external;
