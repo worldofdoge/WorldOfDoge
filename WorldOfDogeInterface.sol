@@ -103,36 +103,51 @@ interface IDogeHero is IERC721Enumerable {
 }
 
 interface IDogeWar {
-    event AttackDoge(address indexed attacker, address indexed defender, uint8 status, uint256 reward);
-    function heroEnter(uint256[] memory heroIds) external;
-    function heroLeave(uint256 amount) external;
-    function heroLeave2(uint256[] memory heroIds) external;
-    function leaveAll() external;
-    function attackDoge(address defenderAddress) external;
+    event DepositDoges(address indexed owner, uint256[] dogeIds);
+    event WithdrawDoges(address indexed owner, uint256[] dogeIds);
+    event AttackHero(address indexed attacker, address indexed defender, uint256 status, uint256 reward);
+    
+    function depositDoges(uint256[] memory dogeIds) external;
+    function withdrawDoges(uint256[] memory dogeIds) external;
+    function withdrawAllDoges() external;
+    function attackHero(address defenderAddress) external;
     function harvestReward() external;
     function pendingReward() external view returns(uint256 pendingRuby, uint256 pendingWOD);
     function areInPointsRange(address _attacker, address _defender) external view returns (bool);
     function balanceOf(address owner) external view returns (uint256);
-    function ownerOf(uint256 tokenId) external view returns (address);
-    function tokenOfOwnerByIndex(address owner, uint256 index) external view returns (uint256);
+    function ownerOf(uint256 dogeId) external view returns (address);
+    function getDoges(address owner) external view returns(uint256[] memory);
     function getTotalHeroOwner() external view returns(uint256);
     function allHeroOwners(uint256 index) external view returns(address);
+    function getHeroOwners() external view returns(address[] memory);
+    function heroInfo(address owner) 
+        external 
+        view 
+        returns(
+            uint32 rank,
+            uint32 share,
+            uint32 health,
+            uint32 attack,
+            uint32 defense,
+            uint176 rubyDebt,
+            uint176 wodDebt
+        );
 }
 
 interface IGeneScience {
     /// @dev return the expressing traits
     /// @param _genes the long number expressing cat genes
-    function expressingTraits(uint256 _genes) external pure returns(uint8[12] memory);    
+    function expressingTraits(uint256 _genes) external pure returns(uint256[12] memory);    
 }
 
 interface ISaleClockAuction {
-    // event AuctionCreated được tạo khi đăng bán thành công
+    // event AuctionCreated được tạo khi đăng bán
     event AuctionCreated(uint256 tokenId, uint256 startingPrice, uint256 endingPrice, uint256 duration);
     
-    // event AuctionSuccessful được tạo khi mua thành công
+    // event AuctionSuccessful được tạo khi mua doge thành công
     event AuctionSuccessful(uint256 tokenId, uint256 totalPrice, address winner);
 
-    //event AuctionCancelled được tạo khi hủy bán thành công
+    //event AuctionCancelled được tạo khi hủy bán
     event AuctionCancelled(uint256 tokenId);
 
     /// @dev Cancels an auction that hasn't been won yet.
@@ -181,12 +196,18 @@ interface ISaleClockAuction {
      * Use along with {balanceOf} to enumerate all of ``owner``'s tokens.
      */
     function tokenOfOwnerByIndex(address owner, uint256 index) external view returns (uint256);
+    /** phí giao dịch doge
+     có giá trị từ 0-10,000 tương ứng với 0%-100% (hiện tại giá trị này bằng 500 tương đương 5%)
+     */
+    function ownerCut() external view returns(uint256);
 }
 
 interface ISiringClockAuction {
+    //các event bên dưới tương tự như contract ISaleClockAuction
     event AuctionCreated(uint256 tokenId, uint256 startingPrice, uint256 endingPrice, uint256 duration);
     event AuctionSuccessful(uint256 tokenId, uint256 totalPrice, address winner);
     event AuctionCancelled(uint256 tokenId);
+
     function cancelAuction(uint256 _tokenId) external;
     function getAuction(uint256 _tokenId)
         external
@@ -204,6 +225,10 @@ interface ISiringClockAuction {
     function balanceOf(address owner) external view returns (uint256);
     function ownerOf(uint256 tokenId) external view returns (address);
     function tokenOfOwnerByIndex(address owner, uint256 index) external view returns (uint256);
+    /** phí giao dịch doge
+     có giá trị từ 0-10,000 tương ứng với 0%-100% (hiện tại giá trị này bằng 500 tương đương 5%)
+     */
+    function ownerCut() external view returns(uint256);
 }
 interface IWODToken is IERC20 {}
 interface IRubyToken is IERC20 {}
