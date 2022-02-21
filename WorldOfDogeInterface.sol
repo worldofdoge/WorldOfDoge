@@ -110,6 +110,8 @@ interface IDogeWar {
     status = 1: win
     status = 2: lose
      */
+    event CreateHero(address indexed heroOwner, uint256 heroId);
+    event RetireHero(address indexed heroOwner, uint256 heroId);
     event AttackHero(address indexed attacker, address indexed defender, uint256 status, uint256 reward);
     
     function depositDoges(uint256[] memory dogeIds) external;
@@ -137,6 +139,16 @@ interface IDogeWar {
             uint176 rubyDebt,
             uint176 wodDebt
         );
+    function getDogeStat(uint256 dogeId) 
+        external 
+        view 
+        returns(
+            uint256 share, 
+            uint256 health, 
+            uint256 attack, 
+            uint256 defense);
+    function totalShare() external view returns(uint256);
+    
 }
 
 interface IGeneScience {
