@@ -55,18 +55,14 @@ interface IDogeHero is IERC721Enumerable {
     /// @dev Put a doge up for auction.
     function createSaleAuction(
         uint256 _dogeId, 
-        uint256 _startingPrice, 
-        uint256 _endingPrice, 
-        uint256 _duration) external;
+        uint256 _price) external;
 
     /// @dev Put a doge up for auction to be sire.
     ///  Performs checks to ensure the doge can be sired, then
     ///  delegates to reverse auction.
     function createSiringAuction(
-        uint256 _dogeId,
-        uint256 _startingPrice,
-        uint256 _endingPrice,
-        uint256 _duration) external;
+        uint256 _dogeId,        
+        uint256 _price) external;
 
     /// @dev Completes a siring auction by bidding.
     ///  Immediately breeds the winning matron with the sire on auction.
@@ -159,7 +155,7 @@ interface IGeneScience {
 
 interface ISaleClockAuction {
     // event AuctionCreated được tạo khi đăng bán
-    event AuctionCreated(uint256 tokenId, uint256 startingPrice, uint256 endingPrice, uint256 duration);
+    event AuctionCreated(uint256 tokenId, uint256 price);
     
     // event AuctionSuccessful được tạo khi mua doge thành công
     event AuctionSuccessful(uint256 tokenId, uint256 totalPrice, address winner);
@@ -182,9 +178,7 @@ interface ISaleClockAuction {
         returns
     (
         address seller,
-        uint256 startingPrice,
-        uint256 endingPrice,
-        uint256 duration,
+        uint256 price,
         uint256 startedAt
     );
 
@@ -221,7 +215,7 @@ interface ISaleClockAuction {
 
 interface ISiringClockAuction {
     //các event bên dưới tương tự như contract ISaleClockAuction
-    event AuctionCreated(uint256 tokenId, uint256 startingPrice, uint256 endingPrice, uint256 duration);
+    event AuctionCreated(uint256 tokenId, uint256 price);
     event AuctionSuccessful(uint256 tokenId, uint256 totalPrice, address winner);
     event AuctionCancelled(uint256 tokenId);
 
@@ -232,9 +226,7 @@ interface ISiringClockAuction {
         returns
     (
         address seller,
-        uint256 startingPrice,
-        uint256 endingPrice,
-        uint256 duration,
+        uint256 price,        
         uint256 startedAt
     );
     function getCurrentPrice(uint256 _tokenId) external view returns (uint256);
